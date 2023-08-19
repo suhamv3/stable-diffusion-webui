@@ -307,10 +307,10 @@ class Api:
 
         print ("Lora check ...")
         lora_prompt = txt2imgreq.prompt
-        print ("Lora prompt : " + lora_prompt)
+        print ("Lora file : " + txt2imgreq.lora_file)
         lora_exists = False
-        lora_name = "lora.txt"
-        filename = "c:/lora_files/lora.txt"
+        lora_name = txt2imgreq.lora_file + ".txt"
+        filename = "c:/lora_files/" + lora_name
         URL = "https://storage.googleapis.com/eluna_ai/lora_models/lora.txt"
         if os.path.isfile(filename):
             lora_exists = True
