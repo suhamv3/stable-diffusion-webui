@@ -307,19 +307,21 @@ class Api:
 
         print ("Lora check ...")
         lora_prompt = txt2imgreq.prompt
-        print ("Lora file : " + txt2imgreq.lora_file)
-        lora_exists = False
-        lora_name = txt2imgreq.lora_file + ".txt"
-        filename = "c:/lora_files/" + lora_name
-        URL = "https://storage.googleapis.com/eluna_ai/lora_models/lora.txt"
-        if os.path.isfile(filename):
-            lora_exists = True
-            print ("Lora found.")
-        else:
-            print ("Lora File not found. Downloading....")
-            response = requests.get(URL)
-            open("c:/lora_files/lora.txt", "wb").write(response.content)
-            print ("Lora download completed.")
+
+        if lora_prompt != "none":
+            print ("Lora file : " + txt2imgreq.lora_file)
+            lora_exists = False
+            lora_name = txt2imgreq.lora_file + ".txt"
+            lora_filename = "c:/lora_files/" + lora_name
+            URL = "https://storage.googleapis.com/eluna_ai/lora_models/" + lora_filename
+            if os.path.isfile(lora_filename):
+                lora_exists = True
+                print ("Lora found.")
+            else:
+                print ("Lora File not found. Downloading....")
+                response = requests.get(URL)
+                open("c:/lora_files/lora.txt", "wb").write(response.content)
+                print ("Lora download completed.")
 
         script_runner = scripts.scripts_txt2img
         if not script_runner.scripts:
