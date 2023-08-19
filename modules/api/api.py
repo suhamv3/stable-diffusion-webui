@@ -33,6 +33,9 @@ import piexif
 import piexif.helper
 from contextlib import closing
 
+import os.path
+import requests
+
 
 def script_name_to_index(name, scripts):
     try:
@@ -301,6 +304,23 @@ class Api:
         return script_args
 
     def text2imgapi(self, txt2imgreq: models.StableDiffusionTxt2ImgProcessingAPI):
+
+        print ("Lora check ...")
+        lora_prompt = txt2imgreq.prompt
+        print ("Lora prompt : " + lora_prompt)
+        lora_exists = False
+        lora_name = "lora.txt"
+        filename = "c:/lora_files/lora.txt"
+        URL = "https://storage.googleapis.com/eluna_ai/lora_models/lora.txt"
+        if os.path.isfile(filename):
+            lora_exists = True
+            print ("Lora found.")
+        else:
+            print ("Lora File not found. Downloading....")
+            response = requests.get(URL)
+            open("c:/lora_files/lora.txt", "wb").write(response.content)
+            print ("Lora download completed.")
+
         script_runner = scripts.scripts_txt2img
         if not script_runner.scripts:
             script_runner.initialize_scripts(False)
