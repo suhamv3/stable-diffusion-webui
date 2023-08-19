@@ -49,19 +49,6 @@ def txt2img(id_task: str, prompt: str, negative_prompt: str, prompt_styles, step
         override_settings=override_settings,
     )
 
-    print ("Lora check ...")
-    lora_exists = False
-    lora_name = "lora.txt"
-    filename = "c:/lora_files/lora.txt"
-    URL = "https://storage.googleapis.com/eluna_ai/lora_models/lora.txt"
-    if os.path.isfile(filename):
-        lora_exists = True
-    else:
-        print ("Lora File not found. Downloading....")
-        response = requests.get(URL)
-        open("c:/lora_files/lora.txt", "wb").write(response.content)
-        print ("Lora download completed.")
-
     p.scripts = modules.scripts.scripts_txt2img
     p.script_args = args
 

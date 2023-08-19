@@ -306,12 +306,11 @@ class Api:
     def text2imgapi(self, txt2imgreq: models.StableDiffusionTxt2ImgProcessingAPI):
 
         print ("Lora check ...")
-        lora_prompt = txt2imgreq.prompt
-
-        if lora_prompt != "none":
-            print ("Lora file : " + txt2imgreq.lora_file)
+        lora_str = txt2imgreq.lora_file
+        if lora_str != "none":
+            print ("Lora file : " + lora_str)
             lora_exists = False
-            lora_name = txt2imgreq.lora_file + ".txt"
+            lora_name = lora_str + ".txt"
             lora_filename = "c:/lora_files/" + lora_name
             URL = "https://storage.googleapis.com/eluna_ai/lora_models/" + lora_filename
             if os.path.isfile(lora_filename):
@@ -322,6 +321,8 @@ class Api:
                 response = requests.get(URL)
                 open("c:/lora_files/lora.txt", "wb").write(response.content)
                 print ("Lora download completed.")
+        else:
+            print ("Lora check completed.")
 
         script_runner = scripts.scripts_txt2img
         if not script_runner.scripts:
