@@ -35,6 +35,7 @@ from contextlib import closing
 
 import os.path
 import requests
+from urllib.parse import urlparse
 
 
 def script_name_to_index(name, scripts):
@@ -303,26 +304,49 @@ class Api:
                         script_args[alwayson_script.args_from + idx] = request.alwayson_scripts[alwayson_script_name]["args"][idx]
         return script_args
 
+    def get_filename_and_extension(url):
+        parsed_url = urlparse(url)
+        path = parsed_url.path
+        filename = os.path.basename(path)
+        return filename
+
     def text2imgapi(self, txt2imgreq: models.StableDiffusionTxt2ImgProcessingAPI):
 
+        #lora check
         print ("Lora check ...")
-        lora_str = txt2imgreq.lora_file
-        if lora_str != "none":
-            print ("Lora file : " + lora_str)
-            lora_exists = False
-            lora_name = lora_str + ".txt"
-            lora_filename = "c:/lora_files/" + lora_name
-            URL = "https://storage.googleapis.com/eluna_ai/lora_models/" + lora_filename
-            if os.path.isfile(lora_filename):
-                lora_exists = True
-                print ("Lora found.")
+
+        lora_local_path = "C:/lora_files/"
+        lora_model_file = txt2imgreq.lora_model_file
+        lora_json_file = txt2imgreq.lora_json_file
+
+        if lora_model_file != "none":
+            print ("Lora model file : " + lora_model_file)
+            lora_model_file_name = self.get_filename_and_extension(lora_model_file)
+            lora_model_local_file_path = lora_local_path + lora_file_name
+
+            if os.path.isfile(lora_model_local_file_path):
+                print ("Lora model found.")
             else:
-                print ("Lora File not found. Downloading....")
-                response = requests.get(URL)
-                open("c:/lora_files/lora.txt", "wb").write(response.content)
-                print ("Lora download completed.")
-        else:
-            print ("Lora check completed.")
+                print ("Lora model file not found on this server. Downloading....")
+                response = requests.get(lora_model_file)
+                open(lora_local_path + lora_model_file_name, "wb").write(response.content)
+                print ("Lora model download completed.")
+
+        if lora_json_file != "none":
+            print ("Lora json file : " + lora_json_file)
+            lora_json_file_name = self.get_filename_and_extension(lora_json_file)
+            lora_json_local_file_path = lora_local_path + lora_json_file_name
+
+            if os.path.isfile(lora_json_local_file_path):
+                print ("Lora json file found.")
+            else:
+                print ("Lora json file file not found on this server. Downloading....")
+                response = requests.get(lora_json_file)
+                open(lora_local_path + lora_json_file_name, "wb").write(response.content)
+                print ("Lora json file download completed.")
+
+        print ("Lora check completed.")
+        #lora check
 
         script_runner = scripts.scripts_txt2img
         if not script_runner.scripts:
