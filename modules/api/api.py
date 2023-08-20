@@ -322,7 +322,7 @@ class Api:
         if lora_model_file != "none":
             print ("Lora model file : " + lora_model_file)
             lora_model_file_name = self.get_filename_and_extension(lora_model_file)
-            lora_model_local_file_path = lora_local_path + lora_file_name
+            lora_model_local_file_path = lora_local_path + lora_model_file_name
 
             if os.path.isfile(lora_model_local_file_path):
                 print ("Lora model found.")
