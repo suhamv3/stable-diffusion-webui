@@ -304,7 +304,7 @@ class Api:
                         script_args[alwayson_script.args_from + idx] = request.alwayson_scripts[alwayson_script_name]["args"][idx]
         return script_args
 
-    def get_filename_and_extension(url):
+    def get_filename_and_extension(self, url):
         parsed_url = urlparse(url)
         path = parsed_url.path
         filename = os.path.basename(path)
@@ -314,8 +314,8 @@ class Api:
 
         #lora check
         print ("Lora check ...")
-
-        lora_local_path = "C:/lora_files/"
+        directory = os.getcwd()
+        lora_local_path = directory + "/models/Lora/"
         lora_model_file = txt2imgreq.lora_model_file
         lora_json_file = txt2imgreq.lora_json_file
 
