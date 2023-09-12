@@ -33,6 +33,7 @@ import piexif
 import piexif.helper
 from contextlib import closing
 
+import random
 import os.path
 import requests
 from urllib.parse import urlparse
@@ -316,6 +317,7 @@ class Api:
         print ("Lora check ...")
         directory = os.getcwd()
         lora_local_path = directory + "/models/Lora/"
+        params = {'id': str(random.randint(0, 999))}
         lora_model_file = txt2imgreq.lora_model_file
         lora_json_file = txt2imgreq.lora_json_file
 
@@ -328,7 +330,7 @@ class Api:
                 print ("Lora model found.")
             else:
                 print ("Lora model file not found on this server. Downloading....")
-                response = requests.get(lora_model_file)
+                response = requests.get(lora_model_file, params=params)
                 open(lora_local_path + lora_model_file_name, "wb").write(response.content)
                 print ("Lora model download completed.")
 
@@ -341,7 +343,7 @@ class Api:
                 print ("Lora json file found.")
             else:
                 print ("Lora json file file not found on this server. Downloading....")
-                response = requests.get(lora_json_file)
+                response = requests.get(lora_json_file, params=params)
                 open(lora_local_path + lora_json_file_name, "wb").write(response.content)
                 print ("Lora json file download completed.")
 
