@@ -321,10 +321,8 @@ class Api:
 
         session = requests.Session()
         session.headers.update({'Cache-Control': 'no-cache'})
-        random_number = random.randint(1000000, 9999999)
 
-        #random_string = ''.join(random.choice(string.ascii_letters) for _ in range(10))
-        lora_model_file_url = txt2imgreq.lora_model_file + str("?nocache="+str(random_number))
+        lora_model_file_url = txt2imgreq.lora_model_file + '?ignoreCache=1'
         lora_model_file = txt2imgreq.lora_model_file
 
         if lora_model_file != "none":
