@@ -33,6 +33,7 @@ import piexif
 import piexif.helper
 from contextlib import closing
 
+import string
 import random
 import os.path
 import requests
@@ -317,9 +318,14 @@ class Api:
         print ("Lora check ...")
         directory = os.getcwd()
         lora_local_path = directory + "/models/Lora/"
-        params = {'id': str(random.randint(0, 999))}
+
+        session = requests.Session()
+        session.headers.update({'Cache-Control': 'no-cache'})
+        random_number = random.randint(1000000, 9999999)
+
+        #random_string = ''.join(random.choice(string.ascii_letters) for _ in range(10))
+        lora_model_file_url = txt2imgreq.lora_model_file + str("?nocache="+str(random_number))
         lora_model_file = txt2imgreq.lora_model_file
-        lora_json_file = txt2imgreq.lora_json_file
 
         if lora_model_file != "none":
             print ("Lora model file : " + lora_model_file)
@@ -330,22 +336,9 @@ class Api:
                 print ("Lora model found.")
             else:
                 print ("Lora model file not found on this server. Downloading....")
-                response = requests.get(lora_model_file, params=params)
+                response = session.get(lora_model_file_url)
                 open(lora_local_path + lora_model_file_name, "wb").write(response.content)
                 print ("Lora model download completed.")
-
-        if lora_json_file != "none":
-            print ("Lora json file : " + lora_json_file)
-            lora_json_file_name = self.get_filename_and_extension(lora_json_file)
-            lora_json_local_file_path = lora_local_path + lora_json_file_name
-
-            if os.path.isfile(lora_json_local_file_path):
-                print ("Lora json file found.")
-            else:
-                print ("Lora json file file not found on this server. Downloading....")
-                response = requests.get(lora_json_file, params=params)
-                open(lora_local_path + lora_json_file_name, "wb").write(response.content)
-                print ("Lora json file download completed.")
 
         print ("Lora check completed.")
         #lora check
